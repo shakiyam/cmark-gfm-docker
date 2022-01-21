@@ -1,0 +1,30 @@
+#!/bin/bash
+set -eu -o pipefail
+
+if [[ -t 0 && -t 1 ]]; then
+  TTY_OPTION='-t'
+else
+  TTY_OPTION=''
+fi
+readonly TTY_OPTION
+if [[ $(command -v docker) ]]; then
+  # shellcheck disable=SC2086
+  docker container run \
+    --name cmark-gfm$$ \
+    --rm \
+    -i \
+    -u "$(id -u):$(id -g)" \
+    -v "$PWD":/work:ro \
+    $TTY_OPTION \
+    docker.io/shakiyam/cmark-gfm "$@"
+else
+  # shellcheck disable=SC2086
+  podman container run \
+    --name cmark-gfm$$ \
+    --rm \
+    --security-opt label=disable \
+    -i \
+    -v "$PWD":/work:ro \
+    $TTY_OPTION \
+    docker.io/shakiyam/cmark-gfm "$@"
+fi
