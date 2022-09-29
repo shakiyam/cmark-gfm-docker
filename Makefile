@@ -8,7 +8,7 @@ ALL_TARGETS := $(shell egrep -o ^[0-9A-Za-z_-]+: $(MAKEFILE_LIST) | sed 's/://')
 
 .PHONY: $(ALL_TARGETS)
 
-all: hadolint shellcheck shfmt build ## Lint and build
+all: hadolint shellcheck shfmt build install ## Lint, build, and install
 	@:
 
 build: ## Build an image from a Dockerfile
@@ -18,6 +18,12 @@ build: ## Build an image from a Dockerfile
 hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/hadolint.sh Dockerfile
+
+install: ## Install cmark-gfm
+	@echo -e "\033[36m$@\033[0m"
+	@sudo cp cmark-gfm /usr/local/bin/cmark-gfm
+	@sudo chmod +x /usr/local/bin/cmark-gfm
+	@curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 
 help: ## Print this help
 	@echo 'Usage: make [target]'
