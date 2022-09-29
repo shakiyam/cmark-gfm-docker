@@ -11,7 +11,7 @@ Installation
 You can install by following these steps:
 
 ```console
-curl -L# https://raw.githubusercontent.com/shakiyam/cmark-gfm-docker/master/oci \
+curl -L# https://raw.githubusercontent.com/shakiyam/cmark-gfm-docker/main/cmark-gfm \
   | sudo tee /usr/local/bin/cmark-gfm >/dev/null
 sudo chmod +x /usr/local/bin/cmark-gfm
 "$(command -v docker || command -v podman)" pull docker.io/shakiyam/cmark-gfm
