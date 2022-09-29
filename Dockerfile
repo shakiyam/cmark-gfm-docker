@@ -1,5 +1,5 @@
 FROM docker.io/alpine:3.16
-ENV CMARK_VERSION=0.29.0.gfm.2
+ENV CMARK_VERSION=0.29.0.gfm.6
 # hadolint ignore=DL3003, DL3018
 RUN apk --no-cache add --virtual build-dependencies curl cmake make gcc g++ \
   && curl -sSL https://github.com/github/cmark/archive/${CMARK_VERSION}.tar.gz -o cmark_${CMARK_VERSION}.tar.gz \
