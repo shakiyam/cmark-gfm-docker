@@ -8,12 +8,23 @@ ALL_TARGETS := $(shell egrep -o ^[0-9A-Za-z_-]+: $(MAKEFILE_LIST) | sed 's/://')
 
 .PHONY: $(ALL_TARGETS)
 
-all: hadolint shellcheck shfmt build install ## Lint, build, and install
+all: check_for_updates hadolint shellcheck shfmt build install ## Check for updates, lint, build, and install
 	@:
 
 build: ## Build an image from a Dockerfile
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/build.sh docker.io/shakiyam/cmark-gfm
+
+check_for_image_updates: ## Check for updates to dependencies
+	@echo -e "\033[36m$@\033[0m"
+	@./tools/check_for_image_updates.sh "$(shell awk -e '/FROM/{print $$2}' Dockerfile)" docker.io/alpine:latest
+
+check_for_new_release: ## Check for updates to dependencies
+	@echo -e "\033[36m$@\033[0m"
+	@./tools/check_for_new_release.sh "$(shell awk -F= -e '/ENV CMARK_VERSION/{print $$2}' Dockerfile)" github/cmark-gfm
+
+check_for_updates: check_for_image_updates check_for_new_release ## Check for updates to dependencies
+	@:
 
 hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
