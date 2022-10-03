@@ -3,7 +3,6 @@ set -eu -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 readonly SCRIPT_DIR
-
 # shellcheck disable=SC1091
 . "$SCRIPT_DIR"/colored_echo.sh
 
