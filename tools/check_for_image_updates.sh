@@ -8,7 +8,7 @@ readonly SCRIPT_DIR
 . "$SCRIPT_DIR"/colored_echo.sh
 
 if [[ $# -ne 2 ]]; then
-  echo_error "image_name1 and image_name2 are required."
+  echo_error "Usage: check_for_image_updates.sh image_name1 image_name2"
   exit 1
 fi
 

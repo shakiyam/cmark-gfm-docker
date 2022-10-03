@@ -8,7 +8,7 @@ readonly SCRIPT_DIR
 . "$SCRIPT_DIR"/colored_echo.sh
 
 if [[ $# -ne 2 ]]; then
-  echo_error "current_release and repository are required."
+  echo_error "Usage: check_for_new_release.sh current_release repository"
   exit 1
 fi
 
