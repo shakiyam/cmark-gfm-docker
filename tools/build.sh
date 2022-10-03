@@ -1,6 +1,22 @@
 #!/bin/bash
 set -eu -o pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+readonly SCRIPT_DIR
+
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR"/colored_echo.sh
+
+if [[ $(command -v docker) ]]; then
+  DOCKER=docker
+elif [[ $(command -v podman) ]]; then
+  DOCKER=podman
+else
+  echo_error "Neither docker nor podman is installed."
+  exit 1
+fi
+readonly DOCKER
+
 case "$#" in
   1)
     IMAGE_NAME="$1"
@@ -11,15 +27,13 @@ case "$#" in
     DOCKERFILE="$2"
     ;;
   *)
-    echo "Usage: build.sh image_name [Dockerfile]"
+    echo_error "Usage: build.sh image_name [Dockerfile]"
     exit 1
     ;;
 esac
 readonly IMAGE_NAME
 readonly DOCKERFILE
 
-DOCKER=$(command -v docker || command -v podman)
-readonly DOCKER
 CURRENT_IMAGE="$($DOCKER image ls -q "$IMAGE_NAME":latest)"
 readonly CURRENT_IMAGE
 $DOCKER image build -f "$DOCKERFILE" -t "$IMAGE_NAME" .
