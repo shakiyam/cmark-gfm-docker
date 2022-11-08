@@ -9,7 +9,6 @@ ALL_TARGETS := $(shell egrep -o ^[0-9A-Za-z_-]+: $(MAKEFILE_LIST) | sed 's/://')
 .PHONY: $(ALL_TARGETS)
 
 all: check_for_updates lint build install ## Check for updates, lint, build, and install
-	@:
 
 build: ## Build an image from a Dockerfile
 	@echo -e "\033[36m$@\033[0m"
@@ -21,10 +20,9 @@ check_for_image_updates: ## Check for image updates
 
 check_for_new_release: ## Check for new release
 	@echo -e "\033[36m$@\033[0m"
-	@./tools/check_for_new_release.sh "$(shell awk -F= -e '/ENV CMARK_VERSION/{print $$2}' Dockerfile)" github/cmark-gfm
+	@./tools/check_for_new_release.sh cmark-gfm github/cmark-gfm "$(shell awk -F= -e '/ENV CMARK_VERSION/{print $$2}' Dockerfile)"
 
 check_for_updates: check_for_image_updates check_for_new_release ## Check for updates to all dependencies
-	@:
 
 hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
@@ -43,7 +41,6 @@ help: ## Print this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[0-9A-Za-z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 lint: hadolint shellcheck shfmt ## Lint all dependencies
-	@:
 
 shellcheck: ## Lint shell scripts
 	@echo -e "\033[36m$@\033[0m"

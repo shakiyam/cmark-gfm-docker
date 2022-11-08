@@ -6,13 +6,14 @@ readonly SCRIPT_DIR
 # shellcheck disable=SC1091
 . "$SCRIPT_DIR"/colored_echo.sh
 
-if [[ $# -ne 2 ]]; then
-  echo_error "Usage: check_for_new_release.sh current_release repository"
+if [[ $# -ne 3 ]]; then
+  echo_error "Usage: check_for_new_release.sh software_name repository current_release"
   exit 1
 fi
 
-readonly CURRENT_RELEASE=$1
+readonly SOFTWARE_NAME=$1
 readonly REPOSITORY=$2
+readonly CURRENT_RELEASE=$3
 LATEST_RELEASE=$(
   curl -sSI "https://github.com/$REPOSITORY/releases/latest" \
     | tr -d '\r' \
@@ -20,7 +21,7 @@ LATEST_RELEASE=$(
 )
 readonly LATEST_RELEASE
 if [[ "$CURRENT_RELEASE" != "$LATEST_RELEASE" ]]; then
-  echo_warn "$CURRENT_RELEASE is not the latest release. The latest release is $LATEST_RELEASE."
+  echo_warn "$SOFTWARE_NAME $CURRENT_RELEASE is not the latest release. The latest release is $LATEST_RELEASE."
   exit 2
 fi
-echo_success "$CURRENT_RELEASE is the latest release."
+echo_success "$SOFTWARE_NAME $CURRENT_RELEASE is the latest release."
