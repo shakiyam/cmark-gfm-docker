@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run check_for_image_updates.sh
         run: ./tools/check_for_image_updates.sh "$(awk -e '/FROM/{print $2}' Dockerfile)" docker.io/alpine:latest
   check_for_new_release:
@@ -20,6 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run check_for_new_release.sh
         run: ./tools/check_for_new_release.sh "$(awk -F= -e '/ENV CMARK_VERSION/{print $2}' Dockerfile)" github/cmark-gfm
