@@ -22,4 +22,4 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run check_for_new_release.sh
-        run: ./tools/check_for_new_release.sh "$(awk -F= -e '/ENV CMARK_VERSION/{print $2}' Dockerfile)" github/cmark-gfm
+        run: ./tools/check_for_new_release.sh cmark-gfm github/cmark-gfm "$(awk -F= -e '/ENV CMARK_VERSION/{print $2}' Dockerfile)"
