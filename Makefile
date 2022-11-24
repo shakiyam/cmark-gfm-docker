@@ -32,6 +32,7 @@ install: ## Install cmark-gfm
 	@echo -e "\033[36m$@\033[0m"
 	@sudo cp cmark-gfm /usr/local/bin/cmark-gfm
 	@sudo chmod +x /usr/local/bin/cmark-gfm
+	@sudo mkdir -p /usr/local/share/man/man1
 	@curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 
 help: ## Print this help
