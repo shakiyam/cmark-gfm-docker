@@ -16,7 +16,7 @@ build: ## Build an image from a Dockerfile
 
 check_for_image_updates: ## Check for image updates
 	@echo -e "\033[36m$@\033[0m"
-	@./tools/check_for_image_updates.sh "$(shell awk -e '/FROM/{print $$2}' Dockerfile)" docker.io/alpine:latest
+	@./tools/check_for_image_updates.sh "$(shell awk -e '/FROM/{print $$2}' Dockerfile)" public.ecr.aws/docker/library/alpine:latest
 
 check_for_new_release: ## Check for new release
 	@echo -e "\033[36m$@\033[0m"

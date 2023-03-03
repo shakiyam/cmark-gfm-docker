@@ -1,4 +1,4 @@
-FROM docker.io/alpine:3.17
+FROM public.ecr.aws/docker/library/alpine:3.17.2
 ENV CMARK_VERSION=0.29.0.gfm.9
 # hadolint ignore=DL3003, DL3018
 RUN apk --no-cache add --virtual build-dependencies curl cmake make gcc g++ \
