@@ -14,7 +14,7 @@ You can install by following these steps:
 curl -L# https://raw.githubusercontent.com/shakiyam/cmark-gfm-docker/main/cmark-gfm \
   | sudo tee /usr/local/bin/cmark-gfm >/dev/null
 sudo chmod +x /usr/local/bin/cmark-gfm
-"$(command -v docker || command -v podman)" pull docker.io/shakiyam/cmark-gfm
+"$(command -v docker || command -v podman)" pull ghcr.io/shakiyam/cmark-gfm
 curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 \
   | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 ```
