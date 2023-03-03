@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Run check_for_image_updates.sh
-        run: ./tools/check_for_image_updates.sh "$(awk -e '/FROM/{print $2}' Dockerfile)" docker.io/alpine:latest
+        run: ./tools/check_for_image_updates.sh "$(awk -e '/FROM/{print $2}' Dockerfile)" public.ecr.aws/docker/library/alpine:latest
   check_for_new_release:
     name: Check for new release
     runs-on: ubuntu-latest
