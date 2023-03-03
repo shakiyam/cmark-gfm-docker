@@ -14,15 +14,11 @@ build: ## Build an image from a Dockerfile
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/build.sh ghcr.io/shakiyam/cmark-gfm
 
-check_for_image_updates: ## Check for image updates
-	@echo -e "\033[36m$@\033[0m"
-	@./tools/check_for_image_updates.sh "$(shell awk -e '/FROM/{print $$2}' Dockerfile)" public.ecr.aws/docker/library/alpine:latest
-
 check_for_new_release: ## Check for new release
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/check_for_new_release.sh cmark-gfm github/cmark-gfm "$(shell awk -F= -e '/ENV CMARK_VERSION/{print $$2}' Dockerfile)"
 
-check_for_updates: check_for_image_updates check_for_new_release ## Check for updates to all dependencies
+check_for_updates: check_for_new_release ## Check for updates to all dependencies
 
 hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
