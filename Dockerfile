@@ -1,5 +1,5 @@
 FROM container-registry.oracle.com/os/oraclelinux:9-slim AS builder
-ENV CMARK_VERSION=0.29.0.gfm.12
+ENV CMARK_VERSION=0.29.0.gfm.13
 # hadolint ignore=DL3003, DL3041
 RUN microdnf -y install  curl cmake make gcc g++ \
   && curl -sSL https://github.com/github/cmark/archive/${CMARK_VERSION}.tar.gz -o cmark_${CMARK_VERSION}.tar.gz \
