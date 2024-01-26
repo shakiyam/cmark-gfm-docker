@@ -7,7 +7,7 @@ else
   TTY_OPTION=''
 fi
 readonly TTY_OPTION
-if [[ $(command -v docker) ]]; then
+if command -v docker &>/dev/null; then
   # shellcheck disable=SC2086
   docker container run \
     --name cmark-gfm$$ \
