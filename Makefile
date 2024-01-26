@@ -16,7 +16,7 @@ build: ## Build an image from a Dockerfile
 
 check_for_new_release: ## Check for new release
 	@echo -e "\033[36m$@\033[0m"
-	@./tools/check_for_new_release.sh cmark-gfm github/cmark-gfm "$(shell awk -F= -e '/ENV CMARK_VERSION/{print $$2}' Dockerfile)"
+	@./tools/check_for_new_release.sh github/cmark-gfm "$(shell awk -F= -e '/ENV CMARK_VERSION/{print $$2}' Dockerfile)"
 
 check_for_updates: check_for_new_release ## Check for updates to all dependencies
 
