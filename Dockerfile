@@ -1,4 +1,4 @@
-FROM container-registry.oracle.com/os/oraclelinux:9-slim AS builder
+FROM ghcr.io/oracle/oraclelinux:9-slim AS builder
 ENV CMARK_VERSION=0.29.0.gfm.13
 # hadolint ignore=DL3003, DL3041
 RUN microdnf -y install  curl cmake make gcc g++ \
@@ -14,7 +14,7 @@ RUN microdnf -y install  curl cmake make gcc g++ \
   && cd ../.. \
   && rm -rf cmark-gfm-${CMARK_VERSION}
 
-FROM container-registry.oracle.com/os/oraclelinux:9-slim
+FROM ghcr.io/oracle/oraclelinux:9-slim
 COPY --from=builder /usr/local/ /usr/local/
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /work
