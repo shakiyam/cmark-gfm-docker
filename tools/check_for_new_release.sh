@@ -16,7 +16,7 @@ readonly CURRENT_RELEASE=$2
 if [[ $# -eq 3 ]]; then
   PATTERN=$3
 else
-  PATTERN='+.'
+  PATTERN='.+'
 fi
 readonly PATTERN
 LATEST_RELEASE=$(
