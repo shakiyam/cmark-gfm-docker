@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eu -o pipefail
+set -Eeu -o pipefail
 
 if [[ -t 0 && -t 1 ]]; then
   TTY_OPTION='-t'
@@ -10,7 +10,7 @@ readonly TTY_OPTION
 if command -v docker &>/dev/null; then
   # shellcheck disable=SC2086
   docker container run \
-    --name cmark-gfm$$ \
+    --name "cmark-gfm_$(uuidgen | head -c8)" \
     --rm \
     -i \
     -u "$(id -u):$(id -g)" \
@@ -20,7 +20,7 @@ if command -v docker &>/dev/null; then
 else
   # shellcheck disable=SC2086
   podman container run \
-    --name cmark-gfm$$ \
+    --name "cmark-gfm_$(uuidgen | head -c8)" \
     --rm \
     --security-opt label=disable \
     -i \
