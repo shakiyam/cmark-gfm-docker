@@ -1,30 +1,35 @@
 #!/bin/bash
 set -Eeu -o pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+readonly SCRIPT_DIR
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR"/tools/colored_echo.sh
+# shellcheck disable=SC1091
+. "$SCRIPT_DIR"/tools/container_engine.sh
+
+CONTAINER_ENGINE=$(detect_container_engine)
+readonly CONTAINER_ENGINE
+if [[ $CONTAINER_ENGINE == docker ]]; then
+  ENGINE_OPTS=(-u "$(id -u):$(id -g)")
+else
+  ENGINE_OPTS=(--security-opt label=disable)
+fi
+readonly ENGINE_OPTS
+
 if [[ -t 0 && -t 1 ]]; then
   TTY_OPTION='-t'
 else
   TTY_OPTION=''
 fi
 readonly TTY_OPTION
-if command -v docker &>/dev/null; then
-  # shellcheck disable=SC2086
-  docker container run \
-    --name "cmark-gfm_$(uuidgen | head -c8)" \
-    --rm \
-    -i \
-    -u "$(id -u):$(id -g)" \
-    -v "$PWD":/work:ro \
-    $TTY_OPTION \
-    ghcr.io/shakiyam/cmark-gfm "$@"
-else
-  # shellcheck disable=SC2086
-  podman container run \
-    --name "cmark-gfm_$(uuidgen | head -c8)" \
-    --rm \
-    --security-opt label=disable \
-    -i \
-    -v "$PWD":/work:ro \
-    $TTY_OPTION \
-    ghcr.io/shakiyam/cmark-gfm "$@"
-fi
+
+# shellcheck disable=SC2086
+$CONTAINER_ENGINE container run \
+  --name "cmark-gfm_$(uuidgen | head -c8)" \
+  --rm \
+  -i \
+  "${ENGINE_OPTS[@]}" \
+  -v "$PWD":/work:ro \
+  $TTY_OPTION \
+  ghcr.io/shakiyam/cmark-gfm "$@"

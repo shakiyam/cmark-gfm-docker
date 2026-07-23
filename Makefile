@@ -30,6 +30,12 @@ hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/hadolint.sh Dockerfile
 
+help: ## Print this help
+	@echo 'Usage: make [target]'
+	@echo ''
+	@echo 'Targets:'
+	@awk 'BEGIN {FS = ":.*?## "} /^[0-9A-Za-z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
 install: ## Install cmark-gfm
 	@echo -e "\033[36m$@\033[0m"
 	@sudo cp cmark-gfm /usr/local/bin/cmark-gfm
@@ -37,18 +43,12 @@ install: ## Install cmark-gfm
 	@sudo mkdir -p /usr/local/share/man/man1
 	@curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 
-help: ## Print this help
-	@echo 'Usage: make [target]'
-	@echo ''
-	@echo 'Targets:'
-	@awk 'BEGIN {FS = ":.*?## "} /^[0-9A-Za-z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
 lint: hadolint shellcheck shfmt ## Lint all dependencies
 
 shellcheck: ## Lint shell scripts
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/shellcheck.sh cmark-gfm tools/*.sh
 
-shfmt: ## Lint shell scripts
+shfmt: ## Lint shell script formatting
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/shfmt.sh -l -d -i 2 -ci -bn cmark-gfm tools/*.sh
