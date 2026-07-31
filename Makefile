@@ -6,9 +6,9 @@ ALL_TARGETS := $(shell grep -E -o ^[0-9A-Za-z_-]+: $(MAKEFILE_LIST) | sed 's/://
 .PHONY: $(ALL_TARGETS)
 .DEFAULT_GOAL := help
 
-all: check_for_updates lint build install ## Check for updates, lint, build, and install
+all: check_for_updates format lint build install ## Check for updates, format, lint, build, and install
 
-build: ## Build an image from a Dockerfile
+build: ## Build Docker image
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/build.sh ghcr.io/shakiyam/cmark-gfm
 
@@ -25,6 +25,8 @@ check_for_new_release: ## Check for new release
 	@./tools/check_for_new_release.sh github/cmark-gfm "$$(awk -F= '/ENV CMARK_VERSION/{print $$2}' Dockerfile)"
 
 check_for_updates: check_for_action_updates check_for_new_release ## Check for updates to all dependencies
+
+format: shfmt ## Run all formatting
 
 hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
@@ -43,12 +45,12 @@ install: ## Install cmark-gfm
 	@sudo mkdir -p /usr/local/share/man/man1
 	@curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 
-lint: hadolint shellcheck shfmt ## Lint all dependencies
+lint: hadolint shellcheck ## Run all linting
 
 shellcheck: ## Lint shell scripts
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/shellcheck.sh cmark-gfm tools/*.sh
 
-shfmt: ## Lint shell script formatting
+shfmt: ## Format shell scripts
 	@echo -e "\033[36m$@\033[0m"
-	@./tools/shfmt.sh -l -d -i 2 -ci -bn cmark-gfm tools/*.sh
+	@./tools/shfmt.sh -l -w -i 2 -ci -bn cmark-gfm tools/*.sh
