@@ -53,7 +53,11 @@ install: ## Install cmark-gfm
 	@sudo mkdir -p /usr/local/share/man/man1
 	@curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 
-lint: actionlint hadolint shellcheck zizmor ## Run all linting
+lint: actionlint hadolint markdownlint shellcheck zizmor ## Run all linting
+
+markdownlint: ## Lint Markdown files
+	@echo -e "\033[36m$@\033[0m"
+	@./tools/markdownlint-cli2.sh "*.md"
 
 shellcheck: ## Lint shell scripts
 	@echo -e "\033[36m$@\033[0m"
