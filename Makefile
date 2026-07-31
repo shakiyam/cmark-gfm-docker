@@ -8,6 +8,10 @@ ALL_TARGETS := $(shell grep -E -o ^[0-9A-Za-z_-]+: $(MAKEFILE_LIST) | sed 's/://
 
 all: check_for_updates format lint build install ## Check for updates, format, lint, build, and install
 
+actionlint: ## Lint GitHub Actions workflow files
+	@echo -e "\033[36m$@\033[0m"
+	@./tools/actionlint.sh
+
 build: ## Build Docker image
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/build.sh ghcr.io/shakiyam/cmark-gfm
@@ -45,7 +49,7 @@ install: ## Install cmark-gfm
 	@sudo mkdir -p /usr/local/share/man/man1
 	@curl -L# https://raw.githubusercontent.com/github/cmark-gfm/master/man/man1/cmark-gfm.1 | sudo tee /usr/local/share/man/man1/cmark-gfm.1 >/dev/null
 
-lint: hadolint shellcheck ## Run all linting
+lint: actionlint hadolint shellcheck zizmor ## Run all linting
 
 shellcheck: ## Lint shell scripts
 	@echo -e "\033[36m$@\033[0m"
@@ -54,3 +58,7 @@ shellcheck: ## Lint shell scripts
 shfmt: ## Format shell scripts
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/shfmt.sh -l -w -i 2 -ci -bn cmark-gfm tools/*.sh
+
+zizmor: ## Lint GitHub Actions workflows for security issues
+	@echo -e "\033[36m$@\033[0m"
+	@./tools/zizmor.sh .
