@@ -30,7 +30,7 @@ check_for_new_release: ## Check for new release
 
 check_for_updates: check_for_action_updates check_for_new_release ## Check for updates to all dependencies
 
-format: shfmt ## Run all formatting
+format: shfmt yamlfmt ## Run all formatting
 
 hadolint: ## Lint Dockerfile
 	@echo -e "\033[36m$@\033[0m"
@@ -58,6 +58,10 @@ shellcheck: ## Lint shell scripts
 shfmt: ## Format shell scripts
 	@echo -e "\033[36m$@\033[0m"
 	@./tools/shfmt.sh -l -w -i 2 -ci -bn cmark-gfm tools/*.sh
+
+yamlfmt: ## Format YAML files
+	@echo -e "\033[36m$@\033[0m"
+	@./tools/yamlfmt.sh .github/zizmor.yml .github/workflows/*.yml
 
 zizmor: ## Lint GitHub Actions workflows for security issues
 	@echo -e "\033[36m$@\033[0m"
