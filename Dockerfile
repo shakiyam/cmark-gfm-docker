@@ -19,5 +19,5 @@ COPY --from=builder /usr/local/ /usr/local/
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /work
 ARG SOURCE_COMMIT
-ENV SOURCE_COMMIT=$SOURCE_COMMIT
+LABEL org.opencontainers.image.revision=$SOURCE_COMMIT
 ENTRYPOINT ["cmark-gfm"]
