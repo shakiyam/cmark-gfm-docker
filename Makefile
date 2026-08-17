@@ -6,7 +6,7 @@ ALL_TARGETS := $(shell grep -E -o ^[0-9A-Za-z_-]+: $(MAKEFILE_LIST) | sed 's/://
 .PHONY: $(ALL_TARGETS)
 .DEFAULT_GOAL := help
 
-all: check_for_updates format lint build install ## Check for updates, format, lint, build, and install
+all: check_for_updates format lint build test install ## Check for updates, format, lint, build, test, and install
 
 actionlint: ## Lint GitHub Actions workflow files
 	@echo -e "\033[36m$@\033[0m"
@@ -65,11 +65,15 @@ markdownlint: ## Lint Markdown files
 
 shellcheck: ## Lint shell scripts
 	@echo -e "\033[36m$@\033[0m"
-	@./tools/shellcheck.sh cmark-gfm tools/*.sh
+	@./tools/shellcheck.sh cmark-gfm test_cmark_gfm.sh tools/*.sh
 
 shfmt: ## Format shell scripts
 	@echo -e "\033[36m$@\033[0m"
-	@./tools/shfmt.sh -l -w -i 2 -ci -bn cmark-gfm tools/*.sh
+	@./tools/shfmt.sh -l -w -i 2 -ci -bn cmark-gfm test_cmark_gfm.sh tools/*.sh
+
+test: ## Test Docker image
+	@echo -e "\033[36m$@\033[0m"
+	@./test_cmark_gfm.sh
 
 yamlfmt: ## Format YAML files
 	@echo -e "\033[36m$@\033[0m"
