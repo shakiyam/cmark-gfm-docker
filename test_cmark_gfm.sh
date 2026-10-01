@@ -21,22 +21,47 @@ else
 fi
 readonly ENGINE_OPTS
 
-if ! OUTPUT=$(echo '# Hello' | $CONTAINER_ENGINE container run \
-  --name "test_cmark_gfm_$(uuidgen | head -c8)" \
-  --rm \
-  --pull=never \
-  -i \
-  "${ENGINE_OPTS[@]}" \
-  "$IMAGE_NAME"); then
-  echo_error 'Test failed: cmark-gfm exited with a non-zero status.'
-  exit 1
-fi
-readonly OUTPUT
+# The wrapper is tested as a standalone copy, as installed by users
+WORK_DIR=$(mktemp -d)
+readonly WORK_DIR
+trap 'rm -rf "$WORK_DIR"' EXIT
+cp "$SCRIPT_DIR"/cmark-gfm "$WORK_DIR"/
+echo '# Hello' >"$WORK_DIR"/test.md
 
-if [[ "$OUTPUT" != '<h1>Hello</h1>' ]]; then
-  echo_error 'Test failed: unexpected output.'
-  echo "$OUTPUT"
-  exit 1
-fi
+run_test() {
+  local -r name=$1
+  shift
+  local output
+  if ! output=$("$@"); then
+    echo_error "Test failed: $name exited with a non-zero status."
+    exit 1
+  fi
+  if [[ "$output" != '<h1>Hello</h1>' ]]; then
+    echo_error "Test failed: $name produced unexpected output."
+    echo "$output"
+    exit 1
+  fi
+  echo_success "Test passed: $name"
+}
 
-echo_success 'Test passed: cmark-gfm converted Markdown to HTML successfully.'
+image_with_stdin() {
+  echo '# Hello' | $CONTAINER_ENGINE container run \
+    --name "test_cmark_gfm_$(uuidgen | head -c8)" \
+    --rm \
+    --pull=never \
+    -i \
+    "${ENGINE_OPTS[@]}" \
+    "$IMAGE_NAME"
+}
+
+wrapper_with_stdin() {
+  (cd "$WORK_DIR" && echo '# Hello' | ./cmark-gfm)
+}
+
+wrapper_with_file() {
+  (cd "$WORK_DIR" && ./cmark-gfm test.md)
+}
+
+run_test 'image with stdin' image_with_stdin
+run_test 'wrapper with stdin' wrapper_with_stdin
+run_test 'wrapper with file' wrapper_with_file
