@@ -15,6 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl cmake make
   && rm -rf cmark-gfm-${CMARK_VERSION}
 
 FROM debian:trixie-slim
+# TODO: Remove package upgrades once base image includes zlib1g >= 1:1.3.dfsg+really1.3.1-1+deb13u1 (CVE-2026-76844, CVE-2026-85091)
+# hadolint ignore=DL3008
+RUN apt-get update \
+  && apt-get -y --no-install-recommends --only-upgrade install zlib1g \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/local/ /usr/local/
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /work
