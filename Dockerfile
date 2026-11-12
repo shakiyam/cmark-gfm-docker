@@ -23,6 +23,8 @@ RUN apt-get update \
 COPY --from=builder /usr/local/ /usr/local/
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /work
+# nobody:nogroup
+USER 65534:65534
 ARG SOURCE_COMMIT
 LABEL org.opencontainers.image.revision=$SOURCE_COMMIT
 ENTRYPOINT ["cmark-gfm"]
