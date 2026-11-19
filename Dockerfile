@@ -1,5 +1,5 @@
 FROM debian:trixie-slim AS builder
-ENV CMARK_VERSION=0.29.0.gfm.13
+ENV CMARK_VERSION=0.29.0.gfm.14
 # hadolint ignore=DL3003,DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends curl cmake make gcc g++ ca-certificates \
   && curl -sSL https://github.com/github/cmark/archive/${CMARK_VERSION}.tar.gz -o cmark_${CMARK_VERSION}.tar.gz \
