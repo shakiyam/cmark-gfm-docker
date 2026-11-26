@@ -15,6 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl cmake make
   && rm -rf cmark-gfm-${CMARK_VERSION}
 
 FROM debian:trixie-slim
+# TODO: Remove package upgrades once base image includes libzstd1 >= 1.5.7+dfsg-1+deb13u1 (CVE-2026-124851)
+# hadolint ignore=DL3008
+RUN apt-get update \
+  && apt-get -y --no-install-recommends --only-upgrade install libzstd1 \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /usr/local/ /usr/local/
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /work
